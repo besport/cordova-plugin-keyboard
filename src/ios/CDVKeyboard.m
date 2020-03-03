@@ -182,6 +182,11 @@ static IMP WKOriginalImp;
     statusBar = [self.webView convertRect:statusBar fromView:nil];
     screen = [self.webView convertRect:screen fromView:nil];
 
+    // Do nothing when the keyboard appears while then application's
+    // view is shrinked (for instance, Facebook login / share on Facebook)
+    // Otherwise, the WebView gets resized in a utterly wrong way
+    if (screen.origin.x < 0) return;
+
     // if the webview is below the status bar, offset and shrink its frame
     if ([self settingForKey:@"StatusBarOverlaysWebView"] != nil && ![[self settingForKey:@"StatusBarOverlaysWebView"] boolValue]) {
         CGRect full, remainder;
